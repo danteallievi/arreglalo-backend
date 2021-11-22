@@ -1,16 +1,16 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-const debug = require("debug")("arreglalo:server");
+const debug = require("debug")("Arreglalo:server");
 const chalk = require("chalk");
 
-export const app = express();
+const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-export const initializeServer = (port) =>
+const initializeServer = (port) =>
   new Promise((resolve, reject) => {
     const server = app.listen(port, () => {
       debug(
@@ -30,3 +30,5 @@ http://localhost:${port}`)
       debug(chalk.yellow("Server express disconnected."));
     });
   });
+
+export = { initializeServer };
