@@ -1,8 +1,10 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-underscore-dangle */
 const mongoose = require("mongoose");
-const debug = require("debug")("arreglalo:server");
+const debug = require("debug")("Arreglalo:server");
 const chalk = require("chalk");
 
-export const initializeDB = (stringDB) =>
+const initializeDB = (stringDB) =>
   new Promise<void>((resolve, reject) => {
     mongoose.set("debug", false);
     mongoose.set("toJSON", {
@@ -27,3 +29,5 @@ export const initializeDB = (stringDB) =>
       debug(chalk.yellow("DB disconnected"));
     });
   });
+
+export = { initializeDB };
