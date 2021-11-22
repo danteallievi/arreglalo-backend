@@ -1,0 +1,37 @@
+{
+  "name": "arreglalo-backend",
+  "version": "1.0.0",
+  "description": "Final project for Skylab bootcamp \"Arreglalo\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkylabCoders/Dante_Back-Final-Project-202109.git"
+  },
+  "author": "Dante Allievi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SkylabCoders/Dante_Back-Final-Project-202109/issues"
+  },
+  "homepage": "https://github.com/SkylabCoders/Dante_Back-Final-Project-202109#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "chalk": "^4.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validation": "^3.0.8",
+    "jwt-decode": "^3.1.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.3.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.1.6"
+  }
+}
