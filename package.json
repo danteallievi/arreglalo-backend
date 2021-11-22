@@ -1,10 +1,14 @@
 {
   "name": "arreglalo-backend",
   "version": "1.0.0",
-  "description": "Final project for Skylab bootcamp \"Arreglalo\"",
+  "description": "Final project for Skylab bootcamp Arreglalo",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "",
+    "dev": "nodemon dist/index.js",
+    "start": "node dist/index.js",
+    "tsc": "tsc --watch"
   },
   "repository": {
     "type": "git",
@@ -27,8 +31,11 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
     "eslint": "^8.3.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^16.0.0",
     "eslint-plugin-import": "^2.25.3",
     "jest": "^27.3.1",
     "nodemon": "^2.0.15",
