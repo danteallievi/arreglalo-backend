@@ -2,7 +2,7 @@
   "name": "arreglalo-backend",
   "version": "1.0.0",
   "description": "Final project for Skylab bootcamp Arreglalo",
-  "main": "index.js",
+  "main": "dist/index.js",
   "engines": {
     "node": "16.13.0"
   },
@@ -10,9 +10,9 @@
     "start": "node dist/index.js",
     "postinstall": "tsc",
     "dev": "nodemon dist/index.js -q",
-    "tsc": "tsc --watch",
+    "ts": "tsc --watch",
     "test": "",
-    "build": "tsc && npm run start"
+    "build": "tsc && node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "express": "^4.17.1",
     "express-validation": "^3.0.8",
     "jwt-decode": "^3.1.2",
+    "mongoose": "^6.0.13",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
