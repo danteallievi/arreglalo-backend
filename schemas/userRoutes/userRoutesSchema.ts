@@ -1,9 +1,11 @@
 import { Joi } from "express-validation";
 
-const loginSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().required(),
-});
+const loginSchema = {
+  body: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+};
 
 const professionalRegisterSchema = {
   body: Joi.object({
