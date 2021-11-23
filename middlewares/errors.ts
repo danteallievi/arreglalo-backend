@@ -3,7 +3,7 @@
 import chalk from "chalk";
 import { ValidationError } from "express-validation";
 import debug from "debug";
-import { IError } from "../interfaces/error/error";
+import IError from "../interfaces/error/error";
 
 export const notFoundErrorHandler = (req, res) => {
   res.status(404).json({ error: "Endpoint not found" });
