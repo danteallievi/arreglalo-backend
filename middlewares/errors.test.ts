@@ -1,4 +1,3 @@
-import { ValidationError } from "express-validation";
 import { notFoundErrorHandler, generalErrorHandler } from "./errors";
 
 interface IResponseTest {
