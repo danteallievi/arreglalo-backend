@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import Debug from "debug";
 
-import { IError } from "../interfaces/error/error";
+import IError from "../interfaces/error/error";
 
 dotenv.config();
 const debug = Debug("Arreglalo:server");
