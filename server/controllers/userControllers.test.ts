@@ -1,23 +1,12 @@
+import { Request } from "express";
 import Professional from "../../DB/models/professional";
 import CustomError from "../../interfaces/error/customError";
 
 import { createProfessional } from "./userControllers";
+import { mockResponse } from "../../utils/mock/mockFunctions";
 
 jest.mock("bcrypt");
 jest.mock("../../DB/models/professional");
-
-interface IResponseTest {
-  status: () => void;
-  json: () => void;
-}
-
-const mockResponse = () => {
-  const res: IResponseTest = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn().mockReturnThis(),
-  };
-  return res;
-};
 
 describe("Given the createProfessional controller", () => {
   describe("When it recibes a request with a invalid body", () => {
@@ -26,7 +15,7 @@ describe("Given the createProfessional controller", () => {
         body: {
           password: "123456",
         },
-      };
+      } as Request;
       const next = jest.fn();
       const expectedError = new Error("Error creating the professional");
       await createProfessional(req, null, next);
@@ -52,7 +41,7 @@ describe("Given the createProfessional controller", () => {
             zip: "test",
           },
         },
-      };
+      } as Request;
       const res = mockResponse();
       const expectedStatus = 201;
 
@@ -81,7 +70,7 @@ describe("Given the createProfessional controller", () => {
             zip: "test",
           },
         },
-      };
+      } as Request;
       const next = jest.fn();
       const expectedError = new CustomError("Email already exist.");
 
