@@ -1,4 +1,5 @@
 import Professional from "../../DB/models/professional";
+import CustomError from "../../interfaces/error/customError";
 
 import { createProfessional } from "./userControllers";
 
@@ -60,6 +61,35 @@ describe("Given the createProfessional controller", () => {
 
       expect(res.json).toHaveBeenCalledWith(req.body);
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+  });
+
+  describe("When it recibes a request with a valid body", () => {
+    test("Then it should call the res method with the professional created", async () => {
+      const req = {
+        body: {
+          name: "test",
+          surname: "test",
+          password: "test",
+          DNI: "test",
+          dateOfBirth: "test",
+          email: "test",
+          phone: "test",
+          address: {
+            street: "test",
+            number: "test",
+            zip: "test",
+          },
+        },
+      };
+      const next = jest.fn();
+      const expectedError = new CustomError("Email already exist.");
+
+      Professional.findOne = jest.fn().mockResolvedValue(true);
+      Professional.create = jest.fn().mockResolvedValue(req.body);
+      await createProfessional(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
     });
   });
 });
