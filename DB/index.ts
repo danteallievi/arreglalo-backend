@@ -3,9 +3,7 @@
 import mongoose from "mongoose";
 import Debug from "debug";
 import chalk from "chalk";
-import dotenv from "dotenv";
 
-dotenv.config();
 const debug = Debug("Arreglalo:DB");
 
 const initializeDB = (stringDB) =>
