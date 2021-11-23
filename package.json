@@ -15,7 +15,8 @@
     "start": "node dist/index",
     "dev": "nodemon dist/index -q",
     "ts": "tsc --watch",
-    "test": "jest --collect-coverage --watchAll",
+    "test": "jest",
+    "test-cov": "jest --collect-coverage --watchAll",
     "build": "tsc && npm start",
     "prepare": "husky install"
   },
