@@ -2,17 +2,22 @@
   "name": "arreglalo-backend",
   "version": "1.0.0",
   "description": "Final project for Skylab bootcamp Arreglalo",
-  "main": "dist/index.js",
+  "main": "dist/index",
   "engines": {
     "node": "16.13.0"
   },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "dist"
+    ]
+  },
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/index",
     "postinstall": "tsc",
-    "dev": "nodemon dist/index.js -q",
+    "dev": "nodemon dist/index -q",
     "ts": "tsc --watch",
-    "test": "",
-    "build": "tsc && node dist/index.js"
+    "test": "jest --collect-coverage --watchAll",
+    "build": "tsc && npm start"
   },
   "repository": {
     "type": "git",
@@ -37,6 +42,10 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.16.3",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "eslint": "^8.3.0",
