@@ -1,8 +1,4 @@
-interface IAddress {
-  city: string;
-  street: string;
-  zip: string;
-}
+import IAddress from "./address";
 
 export default interface IClient {
   name: string;
