@@ -13,11 +13,10 @@
   },
   "scripts": {
     "start": "node dist/index",
-    "postinstall": "tsc",
     "dev": "nodemon dist/index -q",
     "ts": "tsc --watch",
     "test": "jest --collect-coverage --watchAll",
-    "build": "tsc && npm start",
+    "build": "npx tsc && npm start",
     "prepare": "husky install"
   },
   "repository": {
