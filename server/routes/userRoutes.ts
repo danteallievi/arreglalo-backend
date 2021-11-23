@@ -1,14 +1,22 @@
 import express from "express";
 import { validate } from "express-validation";
-import userRoutesSchema from "../../schemas/userRoutes/userRoutesSchema";
+import {
+  professionalRegisterSchema,
+  loginSchema,
+} from "../../schemas/userRoutes/userRoutesSchema";
 
-const { createProfessional } = require("../controllers/userControllers");
+const {
+  createProfessional,
+  loginUser,
+} = require("../controllers/userControllers");
 
 const router = express.Router();
 
+router.post("/login", validate(loginSchema), loginUser);
+
 router.post(
   "/professional/register",
-  validate(userRoutesSchema),
+  validate(professionalRegisterSchema),
   createProfessional
 );
 
