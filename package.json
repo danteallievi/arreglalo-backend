@@ -17,7 +17,7 @@
     "ts": "tsc --watch",
     "test": "jest",
     "test-cov": "jest --collect-coverage --watchAll",
-    "build": "npx tsc && npm start",
+    "build": "tsc",
     "prepare": "husky install"
   },
   "repository": {
