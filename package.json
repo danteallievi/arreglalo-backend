@@ -17,7 +17,8 @@
     "dev": "nodemon dist/index -q",
     "ts": "tsc --watch",
     "test": "jest --collect-coverage --watchAll",
-    "build": "tsc && npm start"
+    "build": "tsc && npm start",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-validation": "^3.0.8",
+    "husky": "^7.0.4",
     "jwt-decode": "^3.1.2",
     "mongoose": "^6.0.13",
     "morgan": "^1.10.0"
