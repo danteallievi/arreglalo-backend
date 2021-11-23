@@ -1,7 +1,6 @@
 module.exports = {
   env: {
     browser: true,
-    commonjs: true,
     es2021: true,
     jest: true,
     node: true,
@@ -20,7 +19,5 @@ module.exports = {
     "no-plusplus": "off",
     "no-restricted-syntax": "off",
     "consistent-return": "off",
-    "no-debugger": "off",
-    "no-console": "off",
   },
 };
