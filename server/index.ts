@@ -6,6 +6,10 @@ import Debug from "debug";
 
 import IError from "../interfaces/error/error";
 import userRoutes from "./routes/userRoutes";
+import {
+  notFoundErrorHandler,
+  generalErrorHandler,
+} from "../middlewares/errors";
 
 const debug = Debug("Arreglalo:server");
 
@@ -37,3 +41,6 @@ http://localhost:${port}`)
   });
 
 app.use("/user", userRoutes);
+
+app.use(notFoundErrorHandler);
+app.use(generalErrorHandler);
