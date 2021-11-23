@@ -1,13 +1,12 @@
 import express from "express";
 import chalk from "chalk";
 import cors from "cors";
-import dotenv from "dotenv";
 import morgan from "morgan";
 import Debug from "debug";
 
 import IError from "../interfaces/error/error";
+import userRoutes from "./routes/userRoutes";
 
-dotenv.config();
 const debug = Debug("Arreglalo:server");
 
 export const app = express();
@@ -37,4 +36,4 @@ http://localhost:${port}`)
     });
   });
 
-// export default { initializeServer, app };
+app.use("/user", userRoutes);
