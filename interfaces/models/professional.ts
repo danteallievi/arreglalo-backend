@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import IAddress from "./address";
 
 export default interface IProfessional {
@@ -7,7 +8,7 @@ export default interface IProfessional {
   password: string;
   DNI: string;
   dateOfBirth: string;
-  clients: string[];
+  clients: ObjectId[];
   phone: string;
   address: IAddress;
   skills: string[];

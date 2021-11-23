@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import IAddress from "./address";
 
 export default interface IClient {
@@ -5,7 +6,7 @@ export default interface IClient {
   surname: string;
   DNI: string;
   dateOfBirth: string;
-  professionals: string[];
+  professionals: ObjectId[];
   email: string;
   password: string;
   phone: string;
