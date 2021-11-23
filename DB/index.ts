@@ -1,8 +1,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
-const mongoose = require("mongoose");
-const debug = require("debug")("Arreglalo:server");
-const chalk = require("chalk");
+import mongoose from "mongoose";
+import Debug from "debug";
+import chalk from "chalk";
+import dotenv from "dotenv";
+
+dotenv.config();
+const debug = Debug("Arreglalo:DB");
 
 const initializeDB = (stringDB) =>
   new Promise<void>((resolve, reject) => {
@@ -30,4 +34,4 @@ const initializeDB = (stringDB) =>
     });
   });
 
-export = { initializeDB };
+export default initializeDB;
