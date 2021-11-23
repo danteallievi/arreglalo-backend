@@ -1,16 +1,22 @@
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-const debug = require("debug")("Arreglalo:server");
-const chalk = require("chalk");
+import express from "express";
+import chalk from "chalk";
+import cors from "cors";
+import dotenv from "dotenv";
+import morgan from "morgan";
+import Debug from "debug";
 
-const app = express();
+import { IError } from "../interfaces/error/error";
+
+dotenv.config();
+const debug = Debug("Arreglalo:server");
+
+export const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-const initializeServer = (port) =>
+export const initializeServer = (port) =>
   new Promise((resolve, reject) => {
     const server = app.listen(port, () => {
       debug(
@@ -19,7 +25,7 @@ http://localhost:${port}`)
       );
       resolve(server);
     });
-    server.on("error", (error) => {
+    server.on("error", (error: IError) => {
       debug(chalk.red("There was an error starting the server."));
       if (error.code === "EADDRINUSE") {
         debug(chalk.red(`The port ${port} is already in use.`));
@@ -31,4 +37,4 @@ http://localhost:${port}`)
     });
   });
 
-export = { initializeServer };
+// export default { initializeServer, app };

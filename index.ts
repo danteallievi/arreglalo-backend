@@ -1,11 +1,11 @@
-require("dotenv").config();
+import dotenv from "dotenv";
 
-const debug = require("debug")("Arreglalo:init");
-const { initializeDB } = require("./DB/index");
-const { initializeServer } = require("./server/index");
+import initializeDB from "./DB/index.js";
+import { initializeServer } from "./server/index.js";
+
+dotenv.config();
 
 const PORT = process.env.PORT ?? 5000;
-debug(process.env.PORT);
 
 (async () => {
   try {

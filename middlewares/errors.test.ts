@@ -1,4 +1,4 @@
-const { notFoundErrorHandler, generalErrorHandler } = require("./errors");
+import { notFoundErrorHandler, generalErrorHandler } from "./errors";
 
 interface IResponseTest {
   status: () => void;
@@ -35,7 +35,7 @@ describe("Given a generalErrorHandler", () => {
         message: "test error",
       };
 
-      generalErrorHandler(error, null, res);
+      generalErrorHandler(error, null, res, null);
 
       expect(res.status).toHaveBeenCalledWith(error.code);
       expect(res.json).toHaveBeenCalledWith({ error: error.message });
@@ -44,9 +44,12 @@ describe("Given a generalErrorHandler", () => {
   describe("When it receives an error without instanceof ValidationError, without error code and message", () => {
     test("Then it should return error code 500 and 'General error' message", () => {
       const res = mockResponse();
-      const error = {};
+      const error = {
+        code: 500,
+        message: "General error",
+      };
 
-      generalErrorHandler(error, null, res);
+      generalErrorHandler(error, null, res, null);
 
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({ error: "General error" });
