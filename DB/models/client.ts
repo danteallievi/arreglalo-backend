@@ -52,6 +52,6 @@ const clientSchema = new Schema<IClient>({
   },
 });
 
-const User = model("User", clientSchema, "Users");
+const User = model("Client", clientSchema, "Clients");
 
 export default User;
