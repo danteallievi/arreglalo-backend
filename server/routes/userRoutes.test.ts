@@ -16,7 +16,6 @@ import Client from "../../DB/models/client";
 const debug = Debug("Arreglalo:Test");
 const request = supertest(app);
 let server;
-let token;
 
 beforeAll(async () => {
   await initializeDB(process.env.DB_STRING_TEST);
@@ -37,12 +36,6 @@ beforeAll(async () => {
     },
     skills: ["a", "b"],
   });
-
-  const loginResponse = await request
-    .post("/user/login")
-    .send({ email: "a@a.com", password: "test" })
-    .expect(200);
-  token = loginResponse.body.token;
 });
 
 afterAll((done) => {
