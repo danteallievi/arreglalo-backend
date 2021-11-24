@@ -1,8 +1,16 @@
 import jwt from "jsonwebtoken";
+import express from "express";
 
 import CustomError from "../interfaces/error/customError";
+import UserData from "../interfaces/auth/userData";
 
-const checkAuthorization = (req, res, next) => {
+declare namespace Express {
+  export interface Request extends express.Request {
+    userData?: UserData;
+  }
+}
+
+const checkAuthorization = (req: Express.Request, res, next) => {
   const authHeader = req.header("Authorization");
   if (!authHeader) {
     const error = new CustomError("Unauthorized.");
