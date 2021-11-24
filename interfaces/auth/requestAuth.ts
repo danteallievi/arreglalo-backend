@@ -3,7 +3,4 @@ import UserData from "./userData";
 
 export interface RequestAuth extends express.Request {
   userData?: UserData;
-  header?: {
-    authorization: string;
-  };
 }
