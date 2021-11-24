@@ -1,11 +1,14 @@
 import { Request } from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import Professional from "../../DB/models/professional";
 import CustomError from "../../interfaces/error/customError";
 
-import { createProfessional } from "./userControllers";
+import { createProfessional, loginUser } from "./userControllers";
 import { mockResponse } from "../../utils/mock/mockFunctions";
 
 jest.mock("bcrypt");
+jest.mock("jsonwebtoken");
 jest.mock("../../DB/models/professional");
 
 describe("Given the createProfessional controller", () => {
@@ -77,6 +80,91 @@ describe("Given the createProfessional controller", () => {
       Professional.findOne = jest.fn().mockResolvedValue(true);
       Professional.create = jest.fn().mockResolvedValue(req.body);
       await createProfessional(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
+    });
+  });
+});
+
+describe("Given the loginUser controller", () => {
+  describe("When it receives a user and is not valid", () => {
+    test("Then it should call the next function with the expected error and status 401", async () => {
+      const req = {
+        body: {
+          email: "test",
+          password: "123456",
+        },
+      } as Request;
+      const next = jest.fn();
+      const expectedError = new CustomError("Wrong credentials.");
+
+      Professional.findOne = jest.fn().mockResolvedValue(null);
+      await loginUser(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
+      expect(next.mock.calls[0][0]).toHaveProperty(
+        "message",
+        expectedError.message
+      );
+    });
+  });
+
+  describe("When it receives a valid user but the password is not valid", () => {
+    test("Then it should call the next function with the expected error and status 401", async () => {
+      const req = {
+        body: {
+          email: "test",
+          password: "123456",
+        },
+      } as Request;
+      const next = jest.fn();
+      const expectedError = new CustomError("Wrong credentials.");
+
+      Professional.findOne = jest.fn().mockResolvedValue(true);
+      bcrypt.compare = jest.fn().mockResolvedValue(false);
+      await loginUser(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
+      expect(next.mock.calls[0][0]).toHaveProperty(
+        "message",
+        expectedError.message
+      );
+    });
+  });
+
+  describe("When it receives a valid user and a valid password", () => {
+    test("Then it should response with the method json and the token", async () => {
+      const req = {
+        body: {
+          email: "test",
+          password: "test",
+        },
+      } as Request;
+      const res = mockResponse();
+      const expectedToken = 123;
+
+      bcrypt.compare = jest.fn().mockResolvedValue(true);
+      jwt.sign = jest.fn().mockReturnValue(expectedToken);
+      Professional.findOne = jest.fn().mockResolvedValue(req.body);
+      await loginUser(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith({ token: expectedToken });
+    });
+  });
+
+  describe("When it receives rejected promise", () => {
+    test("Then it should call the next function with the expected error", async () => {
+      const req = {
+        body: {
+          email: "test",
+          password: "test",
+        },
+      } as Request;
+      const expectedError = new Error("Error logging in the user.");
+
+      const next = jest.fn();
+      Professional.findOne = jest.fn().mockRejectedValue(null);
+      await loginUser(req, null, next);
 
       expect(next).toHaveBeenCalledWith(expectedError);
     });
