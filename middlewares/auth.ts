@@ -1,17 +1,11 @@
 import jwt from "jsonwebtoken";
-import express from "express";
 
 import CustomError from "../interfaces/error/customError";
-import UserData from "../interfaces/auth/userData";
+import { RequestAuth } from "../interfaces/auth/requestAuth";
 
-declare namespace Express {
-  export interface Request extends express.Request {
-    userData?: UserData;
-  }
-}
-
-const checkAuthorization = (req: Express.Request, res, next) => {
+const checkAuthorization = (req: RequestAuth, res, next) => {
   const authHeader = req.header("Authorization");
+
   if (!authHeader) {
     const error = new CustomError("Unauthorized.");
     error.code = 401;
@@ -19,12 +13,14 @@ const checkAuthorization = (req: Express.Request, res, next) => {
     return;
   }
   const token = authHeader.split(" ")[1];
+
   if (!token) {
     const error = new CustomError("Unauthorized.");
     error.code = 401;
     next(error);
     return;
   }
+
   try {
     const { id, name, surname, email } = jwt.verify(
       token,
