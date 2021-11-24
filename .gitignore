@@ -2,3 +2,5 @@ node_modules
 coverage
 dist
 .env
+sonar-project.properties
+.scannerwork
