@@ -14,6 +14,25 @@ const getProfessionals = async (req, res: Response, next) => {
   }
 };
 
+const getProfessional = async (req: RequestAuth, res: Response, next) => {
+  const { id } = req.params;
+  try {
+    const professional = await Professional.findById(id);
+
+    if (!professional) {
+      const error = new CustomError("Professional not found.");
+      error.code = 404;
+      next(error);
+      return;
+    }
+
+    res.status(200).json(professional);
+  } catch {
+    const error = new Error("Error loading the professionals.");
+    next(error);
+  }
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getClients = async (req, res, next) => {
   try {
@@ -51,4 +70,4 @@ const getProfessionalClients = async (
   }
 };
 
-export { getProfessionals, getProfessionalClients };
+export { getProfessionals, getProfessional, getProfessionalClients };

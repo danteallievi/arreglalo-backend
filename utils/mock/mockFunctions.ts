@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+// import UserData from "../../interfaces/auth/userData";
+import { RequestAuth } from "../../interfaces/auth/requestAuth";
 
 export const mockRequest = () => {
   const req = {} as Request;
@@ -10,4 +12,11 @@ export const mockResponse = () => {
   res.status = jest.fn().mockReturnThis();
   res.json = jest.fn().mockReturnThis();
   return res;
+};
+
+export const mockAuthRequest = (body?: any, header?: any) => {
+  const req = {} as RequestAuth;
+  req.body = body;
+  req.header = jest.fn().mockReturnValue(header);
+  return req;
 };
