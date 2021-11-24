@@ -1,5 +1,6 @@
 import {
   getProfessionals,
+  getProfessional,
   getProfessionalClients,
 } from "./professionalControllers";
 import Professional from "../../DB/models/professional";
@@ -35,6 +36,59 @@ describe("Given the getProfessionals function", () => {
       await getProfessionals(req, null, next);
 
       expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given the getProfessional function", () => {
+  describe("When it receives a res, req object and a resolved promise", () => {
+    test("Then it should call the method json with status 200", async () => {
+      const res = mockResponse();
+      const req = mockRequest();
+      req.params = {
+        id: "1",
+      };
+      const expectedReturn = { name: "test" };
+      const expectedStatus = 200;
+
+      Professional.findById = jest.fn().mockResolvedValue(expectedReturn);
+      await getProfessional(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(expectedReturn);
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+  });
+
+  describe("When it receives a res, req object and a rejected promise", () => {
+    test("Then it should call the next function with expected error and status 404", async () => {
+      const req = mockRequest();
+      req.params = {
+        id: "1",
+      };
+      const expectedError = new CustomError("Professional not found.");
+      const next = jest.fn();
+
+      Professional.findById = jest.fn().mockResolvedValue(null);
+      await getProfessional(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", 404);
+    });
+  });
+
+  describe("When it receives a res, req object and a rejected promise", () => {
+    test("Then it should call the next function with expected error and status 404", async () => {
+      const req = mockRequest();
+      req.params = {
+        id: "1",
+      };
+      const expectedError = new Error("Error loading the professionals.");
+      const next = jest.fn();
+
+      Professional.findById = jest.fn().mockRejectedValue(null);
+      await getProfessional(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
     });
   });
 });
