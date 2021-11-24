@@ -1,13 +1,13 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, model } from "mongoose";
 
 import IProfessional from "../../interfaces/models/professional";
 
 const professionalSchema = new Schema<IProfessional>({
   clients: {
-    type: [Types.ObjectId],
+    type: [Schema.Types.ObjectId],
     ref: "Client",
-    default: [],
   },
+
   name: {
     type: String,
     required: true,
@@ -52,6 +52,6 @@ const professionalSchema = new Schema<IProfessional>({
   },
 });
 
-const User = model("Professional", professionalSchema, "Professionals");
+const Professional = model("Professional", professionalSchema);
 
-export default User;
+export default Professional;

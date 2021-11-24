@@ -1,12 +1,11 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, model } from "mongoose";
 
 import IClient from "../../interfaces/models/client";
 
 const clientSchema = new Schema<IClient>({
   professionals: {
-    type: [Types.ObjectId],
+    type: [Schema.Types.ObjectId],
     ref: "Professional",
-    default: [],
   },
   name: {
     type: String,
@@ -52,6 +51,6 @@ const clientSchema = new Schema<IClient>({
   },
 });
 
-const User = model("Client", clientSchema, "Clients");
+const User = model("Client", clientSchema);
 
 export default User;

@@ -6,6 +6,7 @@ import Debug from "debug";
 
 import IError from "../interfaces/error/error";
 import userRoutes from "./routes/userRoutes";
+import professionalRoutes from "./routes/professionalRoutes";
 import {
   notFoundErrorHandler,
   generalErrorHandler,
@@ -41,6 +42,7 @@ http://localhost:${port}`)
   });
 
 app.use("/user", userRoutes);
+app.use("/professional", professionalRoutes);
 
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
