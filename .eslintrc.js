@@ -19,5 +19,6 @@ module.exports = {
     "no-plusplus": "off",
     "no-restricted-syntax": "off",
     "consistent-return": "off",
+    "import/first": "off",
   },
 };
