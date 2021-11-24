@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+import Client from "../../DB/models/client";
 import Professional from "../../DB/models/professional";
 import CustomError from "../../interfaces/error/customError";
 
@@ -9,8 +10,12 @@ const createProfessional = async (req: Request, res: Response, next) => {
   const { password, ...everythingWithoutPassword } = req.body;
 
   try {
-    const mailTaken = await Professional.findOne({ email: req.body.email });
-    if (mailTaken) {
+    const mailProfessionalTaken = await Professional.findOne({
+      email: req.body.email,
+    });
+    const mailClientTaken = await Client.findOne({ email: req.body.email });
+
+    if (mailProfessionalTaken || mailClientTaken) {
       const error = new CustomError("Email already exist.");
       error.code = 403;
       next(error);
@@ -23,6 +28,32 @@ const createProfessional = async (req: Request, res: Response, next) => {
     res.status(201).json(newProfessional);
   } catch {
     const error = new Error("Error creating the professional");
+    next(error);
+  }
+};
+
+const createClient = async (req: Request, res: Response, next) => {
+  const { password, ...everythingWithoutPassword } = req.body;
+
+  try {
+    const mailProfessionalTaken = await Professional.findOne({
+      email: req.body.email,
+    });
+    const mailClientTaken = await Client.findOne({ email: req.body.email });
+
+    if (mailProfessionalTaken || mailClientTaken) {
+      const error = new CustomError("Email already exist.");
+      error.code = 403;
+      next(error);
+      return;
+    }
+    const newClient = await Client.create({
+      ...everythingWithoutPassword,
+      password: await bcrypt.hash(password, 10),
+    });
+    res.status(201).json(newClient);
+  } catch {
+    const error = new Error("Error creating the client.");
     next(error);
   }
 };
@@ -63,4 +94,4 @@ const loginUser = async (req: Request, res: Response, next) => {
   }
 };
 
-export { createProfessional, loginUser };
+export { createProfessional, loginUser, createClient };

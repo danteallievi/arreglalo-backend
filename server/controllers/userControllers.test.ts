@@ -1,14 +1,16 @@
 import { Request } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Professional from "../../DB/models/professional";
-import CustomError from "../../interfaces/error/customError";
 
-import { createProfessional, loginUser } from "./userControllers";
+import Professional from "../../DB/models/professional";
+import Client from "../../DB/models/client";
+import CustomError from "../../interfaces/error/customError";
+import { createClient, createProfessional, loginUser } from "./userControllers";
 import { mockResponse } from "../../utils/mock/mockFunctions";
 
 jest.mock("bcrypt");
 jest.mock("jsonwebtoken");
+jest.mock("../../DB/models/client");
 jest.mock("../../DB/models/professional");
 
 describe("Given the createProfessional controller", () => {
@@ -21,6 +23,7 @@ describe("Given the createProfessional controller", () => {
       } as Request;
       const next = jest.fn();
       const expectedError = new Error("Error creating the professional");
+
       await createProfessional(req, null, next);
 
       expect(next).toHaveBeenCalledWith(expectedError);
@@ -28,7 +31,92 @@ describe("Given the createProfessional controller", () => {
   });
 
   describe("When it recibes a request with a valid body", () => {
-    test("Then it should call the res method with the professional created", async () => {
+    test("Then it should call the res method with the professional created and code 201", async () => {
+      const req = {
+        body: {
+          name: "test",
+          surname: "test",
+          password: "test",
+          DNI: "test",
+          dateOfBirth: "test",
+          email: "test",
+          phone: "test",
+          address: {
+            street: "test",
+            number: "test",
+            zip: "test",
+          },
+          skills: [],
+        },
+      } as Request;
+      const res = mockResponse();
+      const expectedStatus = 201;
+
+      Professional.create = jest.fn().mockResolvedValue(req.body);
+      await createProfessional(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(req.body);
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+  });
+
+  describe("When it recibes a request with a valid body but the email already exists", () => {
+    test("Then it should call the next function with the expected error and code 403", async () => {
+      const req = {
+        body: {
+          name: "test",
+          surname: "test",
+          password: "test",
+          DNI: "test",
+          dateOfBirth: "test",
+          email: "test",
+          phone: "test",
+          address: {
+            street: "test",
+            number: "test",
+            zip: "test",
+          },
+        },
+      } as Request;
+      const next = jest.fn();
+      const expectedError = new CustomError("Email already exist.");
+      expectedError.code = 403;
+
+      Professional.findOne = jest.fn().mockResolvedValue(true);
+      Professional.create = jest.fn().mockResolvedValue(req.body);
+      await createProfessional(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
+      expect(next.mock.calls[0][0].code).toBe(expectedError.code);
+    });
+  });
+});
+
+describe("Given the createClient controller", () => {
+  describe("When it recibes a request with a invalid body", () => {
+    test("Then it should call the next function with the expected error", async () => {
+      const req = {
+        body: {
+          password: "1",
+        },
+      } as Request;
+      const next = jest.fn();
+      const expectedError = new Error("Error creating the client.");
+      const mockedProfessional = Professional as jest.Mocked<
+        typeof Professional
+      >;
+      const mockedClient = Client as jest.Mocked<typeof Client>;
+
+      mockedProfessional.findOne.mockResolvedValue(null);
+      mockedClient.findOne.mockResolvedValue(null);
+      await createClient(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
+    });
+  });
+
+  describe("When it recibes a request with a valid body", () => {
+    test("Then it should call the res method with the client created and code 201", async () => {
       const req = {
         body: {
           name: "test",
@@ -48,16 +136,16 @@ describe("Given the createProfessional controller", () => {
       const res = mockResponse();
       const expectedStatus = 201;
 
-      Professional.create = jest.fn().mockResolvedValue(req.body);
-      await createProfessional(req, res, null);
+      Client.create = jest.fn().mockResolvedValue(req.body);
+      await createClient(req, res, null);
 
       expect(res.json).toHaveBeenCalledWith(req.body);
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
     });
   });
 
-  describe("When it recibes a request with a valid body", () => {
-    test("Then it should call the res method with the professional created", async () => {
+  describe("When it recibes a request with a valid body but the email already exists", () => {
+    test("Then it should call the next function with the expected error and code 403", async () => {
       const req = {
         body: {
           name: "test",
@@ -76,12 +164,14 @@ describe("Given the createProfessional controller", () => {
       } as Request;
       const next = jest.fn();
       const expectedError = new CustomError("Email already exist.");
+      expectedError.code = 403;
 
-      Professional.findOne = jest.fn().mockResolvedValue(true);
-      Professional.create = jest.fn().mockResolvedValue(req.body);
-      await createProfessional(req, null, next);
+      Client.findOne = jest.fn().mockResolvedValue(true);
+      Client.create = jest.fn().mockResolvedValue(req.body);
+      await createClient(req, null, next);
 
       expect(next).toHaveBeenCalledWith(expectedError);
+      expect(next.mock.calls[0][0].code).toBe(expectedError.code);
     });
   });
 });
