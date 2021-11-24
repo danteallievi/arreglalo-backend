@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
-import { Request } from "express";
 
 import checkAuthorization from "./checkAuthorization";
 import CustomError from "../interfaces/error/customError";
+
+import { RequestAuth } from "../interfaces/auth/requestAuth";
 
 jest.mock("jsonwebtoken");
 
@@ -12,7 +13,7 @@ describe("Given a checkAuthorization function", () => {
       const header: any = jest.fn();
       const req = {
         header,
-      } as Request;
+      } as RequestAuth;
       const error = new CustomError("Unauthorized.");
       error.code = 401;
       const next = jest.fn();
@@ -30,7 +31,7 @@ describe("Given a checkAuthorization function", () => {
       const header: any = jest.fn().mockReturnValue("1");
       const req = {
         header,
-      } as Request;
+      } as RequestAuth;
 
       const error = new CustomError("Unauthorized.");
       error.code = 401;
@@ -51,7 +52,7 @@ describe("Given a checkAuthorization function", () => {
         .mockReturnValue("Bearer DGhKdN5jBP2ndIeLQpXumjYHCAkx0UeIGVAJMLhAJLc");
       const req = {
         header,
-      } as Request;
+      } as RequestAuth;
 
       jwt.verify = jest.fn().mockReturnValue({
         id: "1",
@@ -73,7 +74,7 @@ describe("Given a checkAuthorization function", () => {
       const header: any = jest.fn().mockReturnValue("Bearer 123");
       const req = {
         header,
-      } as Request;
+      } as RequestAuth;
       const next = jest.fn();
       const expectedError = new CustomError("Unauthorized.");
       expectedError.code = 401;
