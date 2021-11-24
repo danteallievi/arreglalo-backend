@@ -15,7 +15,7 @@
     "start": "node dist/index",
     "dev": "nodemon dist/index -q",
     "ts": "tsc --watch",
-    "test": "jest",
+    "test": "jest --testPathIgnorePatterns /dist /server/routes/ node_modules",
     "test-cov": "jest --collect-coverage --watchAll",
     "build": "tsc",
     "prepare": "husky install"
