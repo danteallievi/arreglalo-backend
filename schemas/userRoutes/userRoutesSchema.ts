@@ -4,7 +4,6 @@ const loginSchema = {
   body: Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
-    isProfessional: Joi.boolean().required(),
   }),
 };
 
