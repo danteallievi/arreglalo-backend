@@ -7,6 +7,10 @@ const clientSchema = new Schema<IClient>({
     type: [Schema.Types.ObjectId],
     ref: "Professional",
   },
+  professional: {
+    type: Boolean,
+    default: false,
+  },
   name: {
     type: String,
     required: true,

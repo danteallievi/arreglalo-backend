@@ -3,6 +3,7 @@ import IAddress from "./address";
 
 export default interface IProfessional {
   name: string;
+  professional: boolean;
   surname: string;
   email: string;
   password: string;
