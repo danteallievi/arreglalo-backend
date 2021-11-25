@@ -4,7 +4,6 @@ import {
   getProfessionals,
   getProfessional,
   getProfessionalClients,
-  hireProfessional,
   deleteProfessionalProfile,
   updateProfessionalProfile,
 } from "../controllers/professionalControllers";
@@ -12,10 +11,9 @@ import {
 const router = express.Router();
 
 router.get("/", getProfessionals);
+router.get("/clients", checkAuthorization, getProfessionalClients);
 router.get("/:id", getProfessional);
-router.post("/hire/:id", checkAuthorization, hireProfessional);
 router.delete("/delete", checkAuthorization, deleteProfessionalProfile);
 router.put("/update", checkAuthorization, updateProfessionalProfile);
-router.get("/clients", checkAuthorization, getProfessionalClients);
 
 export default router;

@@ -3,11 +3,9 @@ import {
   getProfessional,
   getProfessionalClients,
   deleteProfessionalProfile,
-  hireProfessional,
   updateProfessionalProfile,
 } from "./professionalControllers";
 import Professional from "../../DB/models/professional";
-import Client from "../../DB/models/client";
 import { mockResponse, mockRequest } from "../../utils/mock/mockFunctions";
 import { RequestAuth } from "../../interfaces/auth/requestAuth";
 import CustomError from "../../interfaces/error/customError";
@@ -217,112 +215,6 @@ describe("Given the deleteProfessionalProfile function", () => {
 
       Professional.findByIdAndDelete = jest.fn().mockRejectedValue(null);
       await deleteProfessionalProfile(req, null, next);
-
-      expect(next).toHaveBeenCalledWith(expectedError);
-    });
-  });
-});
-
-describe("Given the hireProfessional function", () => {
-  describe("When it receives a req, res objects and resolved promises", () => {
-    test("Then it should call the method json with the professional to hire", async () => {
-      const res = mockResponse();
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
-      const expectedReturn = {
-        name: "professional",
-      };
-      const expectedStatus = 200;
-
-      Professional.findOneAndUpdate = jest
-        .fn()
-        .mockResolvedValue(expectedReturn);
-      Client.findOneAndUpdate = jest.fn().mockResolvedValue({
-        name: "test",
-      });
-
-      await hireProfessional(req, res, null);
-
-      expect(res.json).toHaveBeenCalledWith(expectedReturn);
-      expect(res.status).toHaveBeenCalledWith(expectedStatus);
-    });
-  });
-
-  describe("When it receives a req object next function and a not found a professional", () => {
-    test("Then it should call the next function with the expected error", async () => {
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
-      const expectedError = new CustomError("Professional not found.");
-      const expectedStatus = 404;
-      const next = jest.fn();
-
-      Professional.findOneAndUpdate = jest.fn().mockResolvedValue(null);
-      Client.findOneAndUpdate = jest.fn().mockResolvedValue({ name: "test" });
-
-      await hireProfessional(req, null, next);
-
-      expect(next).toHaveBeenCalledWith(expectedError);
-      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedStatus);
-    });
-  });
-
-  describe("When it receives a req object next function and a not found a client", () => {
-    test("Then it should call the next function with the expected error", async () => {
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
-      const expectedError = new CustomError("Client not found.");
-      const expectedStatus = 404;
-      const next = jest.fn();
-
-      Professional.findOneAndUpdate = jest
-        .fn()
-        .mockResolvedValue({ name: "test" });
-      Client.findOneAndUpdate = jest.fn().mockResolvedValue(null);
-
-      await hireProfessional(req, null, next);
-
-      expect(next).toHaveBeenCalledWith(expectedError);
-      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedStatus);
-    });
-  });
-
-  describe("When it receives a req object next function and a rejected promise", () => {
-    test("Then it should call the next function with the expected error", async () => {
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
-      const expectedError = new Error("Error hiring the professional.");
-      const next = jest.fn();
-
-      Professional.findOneAndUpdate = jest
-        .fn()
-        .mockResolvedValue({ name: "test" });
-      Client.findOneAndUpdate = jest.fn().mockRejectedValue(null);
-
-      await hireProfessional(req, null, next);
 
       expect(next).toHaveBeenCalledWith(expectedError);
     });
