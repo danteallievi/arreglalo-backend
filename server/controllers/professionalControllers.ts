@@ -56,15 +56,50 @@ const deleteProfessionalProfile = async (
   }
 };
 
+const updateProfessionalProfile = async (
+  req: RequestAuth,
+  res: Response,
+  next
+) => {
+  const { id: userId } = req.userData;
+
+  try {
+    const professional = await Professional.findByIdAndUpdate(
+      userId,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!professional) {
+      const error = new CustomError("Professional not found.");
+      error.code = 404;
+      next(error);
+      return;
+    }
+
+    res.status(200).json(professional);
+  } catch {
+    const error = new Error("Error updating the professional profile.");
+    next(error);
+  }
+};
+
 const hireProfessional = async (req: RequestAuth, res: Response, next) => {
   const { id: clientID } = req.userData;
   const { id: professionalToHireID } = req.params;
 
   try {
-    const professionalToHire = await Professional.findById(
-      professionalToHireID
+    const professionalToHire = await Professional.findOneAndUpdate(
+      { _id: professionalToHireID },
+      { $push: { clients: clientID } }
     );
-    const client = await Client.findById(clientID);
+    const client = await Client.findOneAndUpdate(
+      { _id: clientID },
+      { $push: { professionals: professionalToHireID } }
+    );
 
     if (!professionalToHire) {
       const error = new CustomError("Professional not found.");
@@ -79,12 +114,6 @@ const hireProfessional = async (req: RequestAuth, res: Response, next) => {
       next(error);
       return;
     }
-
-    client.professionals.push(professionalToHire.id);
-    professionalToHire.clients.push(client.id);
-
-    await client.save();
-    await professionalToHire.save();
 
     res.status(200).json(professionalToHire);
   } catch {
@@ -125,4 +154,5 @@ export {
   getProfessionalClients,
   hireProfessional,
   deleteProfessionalProfile,
+  updateProfessionalProfile,
 };
