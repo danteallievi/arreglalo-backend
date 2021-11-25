@@ -1,4 +1,5 @@
 import { Response } from "express";
+
 import { RequestAuth } from "../../interfaces/auth/requestAuth";
 import Professional from "../../DB/models/professional";
 import Client from "../../DB/models/client";
@@ -29,6 +30,28 @@ const getProfessional = async (req: RequestAuth, res: Response, next) => {
     res.status(200).json(professional);
   } catch {
     const error = new Error("Error loading the professionals.");
+    next(error);
+  }
+};
+
+const deleteProfessionalProfile = async (
+  req: RequestAuth,
+  res: Response,
+  next
+) => {
+  const { id } = req.userData;
+  try {
+    const professionalToRemove = await Professional.findByIdAndDelete(id);
+
+    if (!professionalToRemove) {
+      const error = new CustomError("Professional not found.");
+      error.code = 404;
+      next(error);
+      return;
+    }
+    res.status(200).json({ message: "Professional deleted." });
+  } catch {
+    const error = new Error("Error deleting the professional.");
     next(error);
   }
 };
@@ -75,22 +98,22 @@ const getProfessionalClients = async (
   res: Response,
   next
 ) => {
-  const { id: myProfessionalID } = req.userData;
+  const { id: professionalID } = req.userData;
   try {
-    const myProfessional = await Professional.findById(
-      myProfessionalID
+    const professionalFound = await Professional.findById(
+      professionalID
     ).populate("clients");
 
-    if (!myProfessional) {
+    if (!professionalFound) {
       const error = new CustomError("Professional not found.");
       error.code = 404;
       next(error);
       return;
     }
 
-    return res.json(myProfessional).status(200);
+    return res.json(professionalFound).status(200);
   } catch {
-    const error = new CustomError("Error getting the clients.");
+    const error = new CustomError("Error getting the professional clients.");
     error.code = 500;
     next(error);
   }
@@ -101,4 +124,5 @@ export {
   getProfessional,
   getProfessionalClients,
   hireProfessional,
+  deleteProfessionalProfile,
 };
