@@ -33,13 +33,39 @@ const getProfessional = async (req: RequestAuth, res: Response, next) => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getClients = async (req, res, next) => {
+const hireProfessional = async (req: RequestAuth, res: Response, next) => {
+  const { id: clientID } = req.userData;
+  const { id: professionalToHireID } = req.params;
+
   try {
-    const allClients = await Client.find();
-    res.status(200).json(allClients);
+    const professionalToHire = await Professional.findById(
+      professionalToHireID
+    );
+    const client = await Client.findById(clientID);
+
+    if (!professionalToHire) {
+      const error = new CustomError("Professional not found.");
+      error.code = 404;
+      next(error);
+      return;
+    }
+
+    if (!client) {
+      const error = new CustomError("Client not found.");
+      error.code = 404;
+      next(error);
+      return;
+    }
+
+    client.professionals.push(professionalToHire.id);
+    professionalToHire.clients.push(client.id);
+
+    await client.save();
+    await professionalToHire.save();
+
+    res.status(200).json(professionalToHire);
   } catch {
-    const error = new Error("Error loading the clients.");
+    const error = new Error("Error hiring the professional.");
     next(error);
   }
 };
@@ -70,4 +96,9 @@ const getProfessionalClients = async (
   }
 };
 
-export { getProfessionals, getProfessional, getProfessionalClients };
+export {
+  getProfessionals,
+  getProfessional,
+  getProfessionalClients,
+  hireProfessional,
+};
