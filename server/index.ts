@@ -44,7 +44,7 @@ http://localhost:${port}`)
 
 app.use("/user", userRoutes);
 app.use("/professional", professionalRoutes);
-app.use("/clients", clientRoutes);
+app.use("/client", clientRoutes);
 
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
