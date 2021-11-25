@@ -47,7 +47,6 @@ afterAll((done) => {
 });
 
 beforeEach(async () => {
-  await Professional.deleteMany({});
   await Client.deleteMany({});
 });
 
@@ -57,6 +56,17 @@ afterEach(async () => {
 });
 
 describe("Given a /user/login endpoint", () => {
+  describe("When it receive POST request with a valid username and password", () => {
+    test("Then it should respond with a token and status 200", async () => {
+      const { body } = await request
+        .post("/user/login")
+        .send({ email: "a@a.com", password: "test" })
+        .expect(200);
+
+      expect(body).toHaveProperty("token");
+    });
+  });
+
   describe("When it receive POST request with a bad username and password", () => {
     test("Then it should respond with a 401 error", async () => {
       const { body } = await request
