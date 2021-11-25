@@ -5,6 +5,7 @@ import {
   getProfessional,
   getProfessionalClients,
   hireProfessional,
+  deleteProfessionalProfile,
 } from "../controllers/professionalControllers";
 
 const router = express.Router();
@@ -12,6 +13,7 @@ const router = express.Router();
 router.get("/", getProfessionals);
 router.get("/:id", getProfessional);
 router.post("/hire/:id", checkAuthorization, hireProfessional);
+router.delete("/delete", checkAuthorization, deleteProfessionalProfile);
 router.get("/clients", checkAuthorization, getProfessionalClients);
 
 export default router;
