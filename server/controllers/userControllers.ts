@@ -61,7 +61,12 @@ const createClient = async (req: Request, res: Response, next) => {
 const loginUser = async (req: Request, res: Response, next) => {
   const { email, password } = req.body;
   try {
-    const user = await Professional.findOne({ email });
+    let user;
+    user = await Professional.findOne({ email });
+    if (!user) {
+      user = await Client.findOne({ email });
+    }
+
     if (!user) {
       const error = new CustomError("Wrong credentials.");
       error.code = 401;
@@ -69,12 +74,14 @@ const loginUser = async (req: Request, res: Response, next) => {
       return;
     }
     const rightPassword = await bcrypt.compare(password, user.password);
+
     if (!rightPassword) {
       const error = new CustomError("Wrong credentials.");
       error.code = 401;
       next(error);
       return;
     }
+
     const token = jwt.sign(
       {
         id: user.id,
@@ -87,6 +94,7 @@ const loginUser = async (req: Request, res: Response, next) => {
         expiresIn: 48 * 60 * 60,
       }
     );
+
     res.json({ token });
   } catch {
     const error = new Error("Error logging in the user.");
