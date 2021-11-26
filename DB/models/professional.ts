@@ -7,6 +7,11 @@ const professionalSchema = new Schema<IProfessional>({
     type: [Schema.Types.ObjectId],
     ref: "Client",
   },
+  avatar: {
+    type: String,
+    default:
+      "https://cdns.iconmonstr.com/wp-content/assets/preview/2012/240/iconmonstr-user-14.png",
+  },
   professional: {
     type: Boolean,
     default: true,
