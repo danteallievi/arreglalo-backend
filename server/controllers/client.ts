@@ -76,6 +76,25 @@ const hireProfessional = async (req: RequestAuth, res: Response, next) => {
   }
 };
 
+const getClient = async (req: RequestAuth, res: Response, next) => {
+  const { id } = req.params;
+  try {
+    const client = await Client.findById(id);
+
+    if (!client) {
+      const error = new CustomError("Client not found.");
+      error.code = 404;
+      next(error);
+      return;
+    }
+
+    res.status(200).json(client);
+  } catch {
+    const error = new Error("Error loading the client.");
+    next(error);
+  }
+};
+
 const ejectProfessional = async (req, res, next) => {
   const { id: clientID } = req.userData;
   const { id: professionalToEjectID } = req.params;
@@ -113,6 +132,7 @@ const ejectProfessional = async (req, res, next) => {
 
 export {
   getClients,
+  getClient,
   getClientProfessionals,
   hireProfessional,
   ejectProfessional,
