@@ -11,7 +11,7 @@ export const notFoundErrorHandler = (req, res) => {
 
 export const generalErrorHandler = (error: IError, req, res, next) => {
   debug(chalk.red(`Some error happens: ${error.message}`));
-  if (error instanceof ValidationError) {
+  if (error.statusCode === 400) {
     error.code = 400;
     error.message = "Bad request";
   }
