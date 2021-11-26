@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-// import UserData from "../../interfaces/auth/userData";
 import { RequestAuth } from "../../interfaces/auth/requestAuth";
 
 export const mockRequest = () => {
