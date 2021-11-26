@@ -5,9 +5,16 @@ import jwt from "jsonwebtoken";
 import Client from "../../DB/models/client";
 import Professional from "../../DB/models/professional";
 import CustomError from "../../interfaces/error/customError";
+import { RequestFile } from "../../utils/mock/mockFunctions";
 
-const createProfessional = async (req: Request, res: Response, next) => {
-  const { password, ...everythingWithoutPassword } = req.body;
+const createProfessional = async (req: RequestFile, res: Response, next) => {
+  const { password, avatar, ...everythingWithoutPasswordAndAvatar } = req.body;
+  const { file } = req;
+  let image;
+
+  if (file) {
+    image = file.fileURL;
+  }
 
   try {
     const mailProfessionalTaken = await Professional.findOne({
@@ -22,7 +29,8 @@ const createProfessional = async (req: Request, res: Response, next) => {
       return;
     }
     const newProfessional = await Professional.create({
-      ...everythingWithoutPassword,
+      ...everythingWithoutPasswordAndAvatar,
+      avatar: image,
       password: await bcrypt.hash(password, 10),
     });
     res.status(201).json(newProfessional);
@@ -32,8 +40,14 @@ const createProfessional = async (req: Request, res: Response, next) => {
   }
 };
 
-const createClient = async (req: Request, res: Response, next) => {
-  const { password, ...everythingWithoutPassword } = req.body;
+const createClient = async (req: RequestFile, res: Response, next) => {
+  const { password, avatar, ...everythingWithoutPasswordAndAvatar } = req.body;
+  const { file } = req;
+
+  let image;
+  if (file) {
+    image = file.fileURL;
+  }
 
   try {
     const mailProfessionalTaken = await Professional.findOne({
@@ -48,7 +62,8 @@ const createClient = async (req: Request, res: Response, next) => {
       return;
     }
     const newClient = await Client.create({
-      ...everythingWithoutPassword,
+      ...everythingWithoutPasswordAndAvatar,
+      avatar: image,
       password: await bcrypt.hash(password, 10),
     });
     res.status(201).json(newClient);
