@@ -1,3 +1,4 @@
+import { Request } from "express";
 import Professional from "../../DB/models/professional";
 import Client from "../../DB/models/client";
 import {
@@ -5,6 +6,7 @@ import {
   getClientProfessionals,
   hireProfessional,
   ejectProfessional,
+  getClient,
 } from "./client";
 import { mockResponse, mockRequest } from "../../utils/mock/mockFunctions";
 import { RequestAuth } from "../../interfaces/auth/requestAuth";
@@ -36,6 +38,52 @@ describe("Given the getClients function", () => {
 
       Client.find = jest.fn().mockRejectedValue(null);
       await getClients(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given the getClient function", () => {
+  describe("When it receives a res object and the promise resolves", () => {
+    test("Then it should call the method json with status 200", async () => {
+      const res = mockResponse();
+      const req = {} as Request;
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
+      const expectedReturn = { name: "test" };
+      const expectedStatus = 200;
+
+      Client.findById = jest.fn().mockResolvedValue(expectedReturn);
+      await getClient(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(expectedReturn);
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+  });
+
+  describe("When the it receives a invalid user", () => {
+    test("Then it should call the next function with the expected error and status 404", async () => {
+      const req = {} as Request;
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
+      const next = jest.fn();
+      const error = new CustomError("Client not found.");
+
+      Client.findById = jest.fn().mockResolvedValue(null);
+      await getClient(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+
+  describe("When the promise rejects", () => {
+    test("Then it should call the next function with the expected error", async () => {
+      const req = {} as Request;
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
+      const next = jest.fn();
+      const error = new Error("Error loading the client.");
+
+      Client.findById = jest.fn().mockRejectedValue(null);
+      await getClient(req, null, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });
@@ -113,43 +161,36 @@ describe("Given the hireProfessional function", () => {
   describe("When it receives a req, res objects and resolved promises", () => {
     test("Then it should call the method json with the professional to hire", async () => {
       const res = mockResponse();
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
-      const expectedReturn = {
-        name: "professional",
+      const req = {} as RequestAuth;
+      req.userData = {
+        id: 1,
+        email: "a",
+        name: "a",
+        surname: "a",
       };
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
       const expectedStatus = 200;
 
-      Professional.findOneAndUpdate = jest
-        .fn()
-        .mockResolvedValue(expectedReturn);
-      Client.findOneAndUpdate = jest.fn().mockResolvedValue({
-        name: "test",
-      });
+      Professional.findOneAndUpdate = jest.fn().mockResolvedValue(req.userData);
+      Client.findOneAndUpdate = jest.fn().mockResolvedValue({ name: "test" });
 
       await hireProfessional(req, res, null);
 
-      expect(res.json).toHaveBeenCalledWith(expectedReturn);
+      expect(res.json).toHaveBeenCalledWith(req.userData);
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
     });
   });
 
   describe("When it receives a req object next function and a not found a professional", () => {
     test("Then it should call the next function with the expected error", async () => {
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
+      const req = {} as RequestAuth;
+      req.userData = {
+        id: 1,
+        email: "a",
+        name: "a",
+        surname: "a",
+      };
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
       const expectedError = new CustomError("Professional not found.");
       const expectedStatus = 404;
       const next = jest.fn();
@@ -166,14 +207,14 @@ describe("Given the hireProfessional function", () => {
 
   describe("When it receives a req object next function and a not found a client", () => {
     test("Then it should call the next function with the expected error", async () => {
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
+      const req = {} as RequestAuth;
+      req.userData = {
+        id: 1,
+        email: "a",
+        name: "a",
+        surname: "a",
+      };
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
       const expectedError = new CustomError("Client not found.");
       const expectedStatus = 404;
       const next = jest.fn();
@@ -192,14 +233,14 @@ describe("Given the hireProfessional function", () => {
 
   describe("When it receives a req object next function and a rejected promise", () => {
     test("Then it should call the next function with the expected error", async () => {
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
+      const req = {} as RequestAuth;
+      req.userData = {
+        id: 1,
+        email: "a",
+        name: "a",
+        surname: "a",
+      };
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
       const expectedError = new Error("Error hiring the professional.");
       const next = jest.fn();
 
@@ -219,43 +260,38 @@ describe("Given the ejectProfessional function", () => {
   describe("When it receives a req, res objects and resolved promises", () => {
     test("Then it should call the method json with the professional to hire", async () => {
       const res = mockResponse();
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
-      const expectedReturn = {
-        name: "professional",
+      const req = {} as RequestAuth;
+      req.userData = {
+        id: 1,
+        email: "a",
+        name: "a",
+        surname: "a",
       };
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
       const expectedStatus = 200;
 
-      Professional.findOneAndUpdate = jest
-        .fn()
-        .mockResolvedValue(expectedReturn);
+      Professional.findOneAndUpdate = jest.fn().mockResolvedValue(req.userData);
       Client.findOneAndUpdate = jest.fn().mockResolvedValue({
         name: "test",
       });
 
       await ejectProfessional(req, res, null);
 
-      expect(res.json).toHaveBeenCalledWith(expectedReturn);
+      expect(res.json).toHaveBeenCalledWith(req.userData);
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
     });
   });
 
   describe("When it receives a req object next function and a not found a professional", () => {
     test("Then it should call the next function with the expected error", async () => {
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
+      const req = {} as RequestAuth;
+      req.userData = {
+        id: 1,
+        email: "a",
+        name: "a",
+        surname: "a",
+      };
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
       const expectedError = new CustomError("Professional not found.");
       const expectedStatus = 404;
       const next = jest.fn();
@@ -272,14 +308,14 @@ describe("Given the ejectProfessional function", () => {
 
   describe("When it receives a req object next function and a not found a client", () => {
     test("Then it should call the next function with the expected error", async () => {
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
+      const req = {} as RequestAuth;
+      req.userData = {
+        id: 1,
+        email: "a",
+        name: "a",
+        surname: "a",
+      };
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
       const expectedError = new CustomError("Client not found.");
       const expectedStatus = 404;
       const next = jest.fn();
@@ -298,14 +334,14 @@ describe("Given the ejectProfessional function", () => {
 
   describe("When it receives a req object next function and a rejected promise", () => {
     test("Then it should call the next function with the expected error", async () => {
-      const req = {
-        userData: {
-          id: 1,
-        },
-        params: {
-          id: 2,
-        },
-      } as unknown as RequestAuth;
+      const req = {} as RequestAuth;
+      req.userData = {
+        id: 1,
+        email: "a",
+        name: "a",
+        surname: "a",
+      };
+      req.params = { id: "5e9f9f8f8f8f8f8f8f8f8f8" };
       const expectedError = new Error("Error ejecting the professional.");
       const next = jest.fn();
 
