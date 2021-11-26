@@ -15,10 +15,12 @@
     "start": "node dist/index",
     "dev": "nodemon dist/index -q",
     "ts": "tsc --watch",
-    "test": "jest --testPathIgnorePatterns /dist /server/routes/ node_modules",
-    "test-cov": "jest --testPathIgnorePatterns node_modules /dist --collect-coverage --watchAll ",
     "build": "tsc",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "jest --testPathIgnorePatterns /dist /server/routes/ node_modules",
+    "test-cov": "jest --testPathIgnorePatterns node_modules /dist /server/routes/ --collect-coverage --watchAll",
+    "test-cov-all": "jest --watchAll --runInBand --collect-coverage",
+    "supertest": "jest --testPathPattern --runInBand /server/routes/"
   },
   "repository": {
     "type": "git",
