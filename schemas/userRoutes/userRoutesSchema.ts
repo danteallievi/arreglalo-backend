@@ -11,6 +11,7 @@ const professionalRegisterSchema = {
   body: Joi.object({
     name: Joi.string().required(),
     surname: Joi.string().required(),
+    avatar: Joi.string().optional(),
     password: Joi.string().required(),
     DNI: Joi.string().required(),
     dateOfBirth: Joi.string().required(),
@@ -28,6 +29,7 @@ const professionalRegisterSchema = {
 const clientRegisterSchema = {
   body: Joi.object({
     name: Joi.string().required(),
+    avatar: Joi.string().optional(),
     surname: Joi.string().required(),
     password: Joi.string().required(),
     DNI: Joi.string().required(),

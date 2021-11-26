@@ -92,7 +92,7 @@ describe("Given a /user/professional/register endpoint", () => {
         password: "test",
         DNI: "123",
         dateOfBirth: "123",
-        email: "a@a.com",
+        email: "pollit@pollo.com",
         phone: "123",
         address: {
           street: "1",
@@ -130,6 +130,7 @@ describe("Given a /user/professional/register endpoint", () => {
           surname: "test",
           password: "test",
           DNI: "123",
+          avatar: "test.jpg",
           dateOfBirth: "123",
           email: "te@st.com",
           phone: "123",
@@ -170,6 +171,7 @@ describe("Given a /user/professional/register endpoint", () => {
           dateOfBirth: "123",
           email: "a@a.com",
           phone: "123",
+          avatar: "asd",
           address: {
             street: "1",
             city: "2",
@@ -183,6 +185,7 @@ describe("Given a /user/professional/register endpoint", () => {
           surname: "test",
           password: "test",
           DNI: "123",
+          avatar: "asd",
           dateOfBirth: "123",
           email: "a@a.com",
           phone: "123",

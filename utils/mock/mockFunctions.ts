@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import { RequestAuth } from "../../interfaces/auth/requestAuth";
 
+export interface RequestFile extends Request {
+  file?: any;
+}
+
 export const mockRequest = () => {
   const req = {} as Request;
   return req;

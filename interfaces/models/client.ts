@@ -3,6 +3,7 @@ import IAddress from "./address";
 
 export default interface IClient {
   name: string;
+  avatar: string;
   professional: boolean;
   surname: string;
   DNI: string;
