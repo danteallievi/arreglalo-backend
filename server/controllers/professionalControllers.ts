@@ -107,7 +107,33 @@ const getProfessionalClients = async (
     return res.json(professionalFound).status(200);
   } catch {
     const error = new CustomError("Error getting the professional clients.");
-    error.code = 500;
+    next(error);
+  }
+};
+
+const rateProfessional = async (req: RequestAuth, res: Response, next) => {
+  const { id: professionalID } = req.params;
+  const rate = req.body;
+  try {
+    const professional = await Professional.findByIdAndUpdate(
+      professionalID,
+      rate,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!professional) {
+      const error = new CustomError("Professional not found.");
+      error.code = 404;
+      next(error);
+      return;
+    }
+
+    res.status(200).json(professional);
+  } catch {
+    const error = new Error("Error updating the professional rate.");
     next(error);
   }
 };
@@ -118,4 +144,5 @@ export {
   getProfessionalClients,
   deleteProfessionalProfile,
   updateProfessionalProfile,
+  rateProfessional,
 };
