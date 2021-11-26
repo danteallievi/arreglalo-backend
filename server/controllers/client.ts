@@ -76,4 +76,44 @@ const hireProfessional = async (req: RequestAuth, res: Response, next) => {
   }
 };
 
-export { getClients, getClientProfessionals, hireProfessional };
+const ejectProfessional = async (req, res, next) => {
+  const { id: clientID } = req.userData;
+  const { id: professionalToEjectID } = req.params;
+
+  try {
+    const professionalToEject = await Professional.findOneAndUpdate(
+      { _id: professionalToEjectID },
+      { $pull: { clients: clientID } }
+    );
+    const client = await Client.findOneAndUpdate(
+      { _id: clientID },
+      { $pull: { professionals: professionalToEjectID } }
+    );
+
+    if (!professionalToEject) {
+      const error = new CustomError("Professional not found.");
+      error.code = 404;
+      next(error);
+      return;
+    }
+
+    if (!client) {
+      const error = new CustomError("Client not found.");
+      error.code = 404;
+      next(error);
+      return;
+    }
+
+    res.status(200).json(professionalToEject);
+  } catch {
+    const error = new Error("Error ejecting the professional.");
+    next(error);
+  }
+};
+
+export {
+  getClients,
+  getClientProfessionals,
+  hireProfessional,
+  ejectProfessional,
+};
