@@ -1,9 +1,12 @@
+import { Request } from "express";
+
 import {
   getProfessionals,
   getProfessional,
   getProfessionalClients,
   deleteProfessionalProfile,
   updateProfessionalProfile,
+  rateProfessional,
 } from "./professionalControllers";
 import Professional from "../../DB/models/professional";
 import { mockResponse, mockRequest } from "../../utils/mock/mockFunctions";
@@ -127,7 +130,6 @@ describe("Given the getProfessionalClients function", () => {
       const expectedError = new CustomError(
         "Error getting the professional clients."
       );
-      const expectedCode = 500;
       const next = jest.fn();
 
       Professional.findById = jest.fn().mockReturnValue({
@@ -136,7 +138,6 @@ describe("Given the getProfessionalClients function", () => {
       await getProfessionalClients(req, null, next);
 
       expect(next).toHaveBeenCalledWith(expectedError);
-      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedCode);
     });
   });
 
@@ -285,6 +286,56 @@ describe("Given the updateProfessionalProfile function", () => {
 
       Professional.findByIdAndUpdate = jest.fn().mockRejectedValue(null);
       await updateProfessionalProfile(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
+    });
+  });
+});
+
+describe("Given the rateProfessional function", () => {
+  describe("When it receives a req and res objects with a valid user", () => {
+    test("Then it should call the json method with the user and a status 200", async () => {
+      const res = mockResponse();
+      const req = {} as Request;
+      req.body = { name: "test", rate: 3 };
+      req.params = { id: "1" };
+      const expectedStatus = 200;
+
+      Professional.findByIdAndUpdate = jest.fn().mockResolvedValue(req.body);
+      await rateProfessional(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(req.body);
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+  });
+
+  describe("When it receives a req object and next function with a invalid user", () => {
+    test("Then it should call the next function with the expected error", async () => {
+      const req = {} as Request;
+      req.body = { name: "test", rate: 3 };
+      req.params = { id: "1" };
+      const expectedError = new CustomError("Professional not found.");
+      const expectedStatus = 404;
+      const next = jest.fn();
+
+      Professional.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
+      await rateProfessional(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(expectedError);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedStatus);
+    });
+  });
+
+  describe("When it receives a req object and next function with a rejected promise", () => {
+    test("Then it should call the next function with the expected error", async () => {
+      const req = {} as Request;
+      req.body = { name: "test", rate: 3 };
+      req.params = { id: "1" };
+      const expectedError = new Error("Error updating the professional rate.");
+      const next = jest.fn();
+
+      Professional.findByIdAndUpdate = jest.fn().mockRejectedValue(null);
+      await rateProfessional(req, null, next);
 
       expect(next).toHaveBeenCalledWith(expectedError);
     });

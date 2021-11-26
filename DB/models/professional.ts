@@ -15,6 +15,12 @@ const professionalSchema = new Schema<IProfessional>({
     type: String,
     required: true,
   },
+  rate: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5,
+  },
   surname: {
     type: String,
     required: true,
