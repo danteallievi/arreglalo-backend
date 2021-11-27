@@ -50,6 +50,10 @@ const professionalSchema = new Schema<IProfessional>({
     type: String,
     required: true,
   },
+  skills: {
+    type: [String],
+    required: true,
+  },
   address: {
     city: {
       type: String,

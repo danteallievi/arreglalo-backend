@@ -7,9 +7,8 @@ const upload = multer({
     filename: (req, file, callback) => {
       const oldFilename = file.originalname;
       const oldFilenameExtension = path.extname(oldFilename);
-
       const newFilename = `${
-        req.body.arreglaloProfile
+        req.body.name
       }-${Date.now()}-${oldFilenameExtension}`;
       callback(null, newFilename);
     },

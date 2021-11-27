@@ -20,17 +20,17 @@ router.post("/login", validate(loginSchema), loginUser);
 
 router.post(
   "/professional/register",
-  validate(professionalRegisterSchema),
   upload.single("avatar"),
   firebase,
+  validate(professionalRegisterSchema),
   createProfessional
 );
 
 router.post(
   "/client/register",
-  validate(clientRegisterSchema),
   upload.single("avatar"),
   firebase,
+  validate(clientRegisterSchema),
   createClient
 );
 
