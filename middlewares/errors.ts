@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-param-reassign */
 import chalk from "chalk";
-import { ValidationError } from "express-validation";
 import debug from "debug";
 import IError from "../interfaces/error/error";
 
