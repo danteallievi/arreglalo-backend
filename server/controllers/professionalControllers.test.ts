@@ -19,7 +19,13 @@ describe("Given the getProfessionals function", () => {
   describe("When it receives a res object and a resolved promise", () => {
     test("Then it should call the method json with status 200", async () => {
       const res = mockResponse();
-      const req = mockRequest();
+      const req = {} as RequestAuth;
+      req.userData = {
+        id: 1,
+        email: "a",
+        name: "a",
+        surname: "a",
+      } as RequestAuth;
       const expectedReturn = [{ name: "test" }];
       const expectedStatus = 200;
 
@@ -33,7 +39,13 @@ describe("Given the getProfessionals function", () => {
 
   describe("When it receives a rejected promise", () => {
     test("Then it should call the next function with the expected error", async () => {
-      const req = mockRequest();
+      const req = {} as RequestAuth;
+      req.userData = {
+        id: 1,
+        email: "a",
+        name: "a",
+        surname: "a",
+      };
       const next = jest.fn();
       const error = new Error("Error loading the professionals.");
 
