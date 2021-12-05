@@ -25,7 +25,7 @@ describe("Given the getProfessionals function", () => {
         email: "a",
         name: "a",
         surname: "a",
-      } as RequestAuth;
+      };
       const expectedReturn = [{ name: "test" }];
       const expectedStatus = 200;
 
