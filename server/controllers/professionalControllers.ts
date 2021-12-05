@@ -5,8 +5,10 @@ import Professional from "../../DB/models/professional";
 import CustomError from "../../interfaces/error/customError";
 
 const getProfessionals = async (req, res: Response, next) => {
+  const { id } = req.userData;
+
   try {
-    const allProfessionals = await Professional.find();
+    const allProfessionals = await Professional.find({ _id: { $ne: id } });
     res.status(200).json(allProfessionals);
   } catch {
     const error = new Error("Error loading the professionals.");
