@@ -73,6 +73,24 @@ beforeEach(async () => {
     clients: [],
   });
 
+  await Professional.create({
+    _id: "619fae64251f9aef1e489999",
+    name: "secondProfessional",
+    surname: "secondProfessional",
+    password: await bcrypt.hash("secondProfessional", 10),
+    DNI: "123",
+    dateOfBirth: "123",
+    email: "secondProfessional@secondProfessional.com",
+    phone: "123",
+    address: {
+      street: "1",
+      city: "2",
+      zip: "3",
+    },
+    skills: ["a", "b"],
+    clients: [],
+  });
+
   const loginResponse = await request
     .post("/user/login")
     .send({ email: "professional@professional.com", password: "professional" })
@@ -83,9 +101,12 @@ beforeEach(async () => {
 describe("Given a /professional endpoint", () => {
   describe("When it receive GET request", () => {
     test("Then it should respond with a professionals array and status 200", async () => {
-      const { body } = await request.get("/professional").expect(200);
+      const { body } = await request
+        .get("/professional")
+        .set("Authorization", `Bearer ${professionalToken}`)
+        .expect(200);
 
-      expect(body[0]).toHaveProperty("name");
+      expect(body.length).toBeTruthy();
     });
   });
 });

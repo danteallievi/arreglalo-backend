@@ -11,7 +11,7 @@ import {
 
 const router = express.Router();
 
-router.get("/", getProfessionals);
+router.get("/", checkAuthorization, getProfessionals);
 router.get("/clients", checkAuthorization, getProfessionalClients);
 router.get("/:id", getProfessional);
 router.delete("/delete", checkAuthorization, deleteProfessionalProfile);
