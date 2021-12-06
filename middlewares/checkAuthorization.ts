@@ -22,11 +22,11 @@ const checkAuthorization = (req: RequestAuth, res, next) => {
   }
 
   try {
-    const { id, name, surname, email } = jwt.verify(
+    const { id, name, surname, email, professional } = jwt.verify(
       token,
       process.env.JWT_SECRET
     );
-    req.userData = { id, name, surname, email };
+    req.userData = { id, name, surname, email, professional };
     next();
   } catch {
     const error = new CustomError("Unauthorized.");

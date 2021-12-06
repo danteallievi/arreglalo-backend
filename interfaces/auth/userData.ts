@@ -3,4 +3,5 @@ export default interface UserData {
   name;
   surname;
   email;
+  professional?;
 }
