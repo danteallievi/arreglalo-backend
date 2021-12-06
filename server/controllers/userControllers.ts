@@ -103,6 +103,7 @@ const loginUser = async (req: Request, res: Response, next) => {
         name: user.name,
         surname: user.surname,
         email: user.email,
+        professional: user.professional,
       },
       process.env.JWT_SECRET,
       {
