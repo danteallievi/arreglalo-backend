@@ -1,0 +1,69 @@
+{
+  "name": "arreglalo-backend",
+  "version": "1.0.0",
+  "description": "Final project for Skylab bootcamp Arreglalo",
+  "main": "dist/index",
+  "engines": {
+    "node": "16.13.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "dist"
+    ]
+  },
+  "scripts": {
+    "start": "node dist/index",
+    "dev": "nodemon dist/index -q",
+    "ts": "tsc --watch",
+    "build": "tsc",
+    "prepare": "husky install",
+    "test": "jest --testPathIgnorePatterns /dist /server/routes/ node_modules",
+    "test-cov": "jest --testPathIgnorePatterns node_modules /dist /server/routes/ --collect-coverage --watchAll",
+    "test-cov-all": "jest --watchAll --runInBand --collect-coverage --testPathIgnorePatterns node_modules /dist",
+    "supertest": "jest --testPathPattern --runInBand /server/routes/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkylabCoders/Dante_Back-Final-Project-202109.git"
+  },
+  "author": "Dante Allievi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SkylabCoders/Dante_Back-Final-Project-202109/issues"
+  },
+  "homepage": "https://github.com/SkylabCoders/Dante_Back-Final-Project-202109#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "chalk": "^4.1.2",
+    "cors": "^2.8.5",
+    "debug": "^2.6.9",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validation": "^3.0.8",
+    "firebase": "^9.5.0",
+    "firebase-admin": "^10.0.0",
+    "husky": "^7.0.4",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^3.1.2",
+    "mongoose": "^6.0.13",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.3"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.16.3",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/jest": "^27.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.3.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^16.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.1.6",
+    "typescript": "^4.5.2"
+  }
+}
